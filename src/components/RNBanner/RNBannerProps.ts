@@ -14,5 +14,5 @@ export interface RNBannerProps {
     onAdClicked?(): void;
     onAdClosed?(): void;
     onNativeError?(): void;
-    onPropsSet?: (): void;
+    onPropsSet?(): void;
 }

@@ -29,12 +29,12 @@ interface RNBannerRef {
 export const RNBanner = forwardRef<RNBannerRef, RNBannerProps>((props, ref)=> {
     const { targeting = {}, testDeviceIds = [], onAdRequest, onAdFailedToLoad, onAdLoaded, onAdClicked, onAdClosed, onNativeError, onPropsSet, ...rest } = props;
 
+    const bannerViewRef = useRef<any>(null);
     const arePropsSet = useRef<boolean>(false);
     const isRequestedToAdd = useRef<boolean>(false);
     const isRequestedToLoad = useRef<boolean>(false);
     const adState = useRef<AdState>(AdState.DESTROYED);
     const viewState = useRef<ViewState>(ViewState.REMOVED);
-    const bannerViewRef = useRef<typeof RNBannerView>(null);
 
     useImperativeHandle(ref, () => ({
         loadBanner,
@@ -170,6 +170,7 @@ export const RNBanner = forwardRef<RNBannerRef, RNBannerProps>((props, ref)=> {
             {...rest}
             ref={bannerViewRef}
             targeting={targeting}
+            onAdLoaded={handleAdLoaded}
             onPropsSet={handlePropsSet}
             onAdClosed={handleAdClosed}
             onAdRequest={handleAdRequest}
@@ -181,4 +182,4 @@ export const RNBanner = forwardRef<RNBannerRef, RNBannerProps>((props, ref)=> {
     );
 });
 
-const RNBannerView = requireNativeComponent("RNBannerView");
+const RNBannerView = requireNativeComponent<RNBannerProps>("RNBannerView");
