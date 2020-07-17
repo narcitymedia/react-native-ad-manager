@@ -1,74 +1,70 @@
 {
-  "name": "react-native-ad-manager",
-  "version": "0.1.0",
-  "description": "A React Native wrapper around Google Ad Manager SDKs",
-  "main": "lib/commonjs/index",
-  "module": "lib/module/index",
-  "types": "lib/typescript/src/index.d.ts",
-  "react-native": "src/index",
-  "source": "src/index",
-  "files": [
-    "src",
-    "lib",
-    "android",
-    "ios",
-    "cpp",
-    "react-native-ad-manager.podspec",
-    "!lib/typescript/example",
-    "!**/__tests__",
-    "!**/__fixtures__",
-    "!**/__mocks__"
-  ],
-  "scripts": {
-    "test": "jest",
-    "typescript": "tsc --noEmit",
-    "lint": "eslint \"**/*.{js,ts,tsx}\"",
-    "prepare": "bob build",
-    "release": "release-it",
-    "example": "yarn --cwd example",
-    "pods": "cd example && pod-install --quiet",
-    "bootstrap": "yarn example && yarn && yarn pods"
-  },
-  "keywords": [
-    "react-native",
-    "ios",
-    "android"
-  ],
-  "repository": "https://www.github.com/narcitymedia/react-native-ad-manager",
-  "author": "emeraldsanto <yanick@narcitymedia.com> (https://www.github.com/emeraldsanto)",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://www.github.com/narcitymedia/react-native-ad-manager/issues"
-  },
-  "homepage": "https://www.github.com/narcitymedia/react-native-ad-manager#readme",
-  "devDependencies": {
-    "@react-native-community/bob": "^0.16.2",
-    "@types/jest": "^26.0.4",
-    "@types/react": "^16.9.19",
-    "@types/react-native": "^0.63.1",
-    "jest": "^26.0.1",
-    "react": "16.11.0",
-    "react-native": "0.62.2",
-    "typescript": "^3.9.7"
-  },
-  "peerDependencies": {
-    "react": "*",
-    "react-native": "*"
-  },
-  "jest": {
-    "preset": "react-native",
-    "modulePathIgnorePatterns": [
-      "<rootDir>/example/node_modules",
-      "<rootDir>/lib/"
-    ]
-  },
-  "@react-native-community/bob": {
-    "source": "src",
-    "output": "lib",
-    "targets": [
-      "commonjs",
-      "module",
-      "typescript"
-    ]
-  }
+	"name": "react-native-ad-manager",
+	"version": "0.1.0",
+	"description": "A React Native wrapper around Google Ad Manager SDKs",
+	"main": "lib/commonjs/index",
+	"module": "lib/module/index",
+	"types": "lib/typescript/src/index.d.ts",
+	"react-native": "src/index",
+	"source": "src/index",
+	"files": [
+		"src",
+		"lib",
+		"android",
+		"ios",
+		"cpp",
+		"react-native-ad-manager.podspec",
+		"!lib/typescript/example",
+		"!**/__tests__",
+		"!**/__fixtures__",
+		"!**/__mocks__"
+	],
+	"scripts": {
+		"test": "jest",
+		"typescript": "tsc --noEmit",
+		"prepare": "bob build",
+		"example": "yarn --cwd example"
+	},
+	"keywords": [
+		"react-native",
+		"ios",
+		"android"
+	],
+	"repository": "https://www.github.com/narcitymedia/react-native-ad-manager",
+	"author": "emeraldsanto <yanick@narcitymedia.com> (https://www.github.com/emeraldsanto)",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://www.github.com/narcitymedia/react-native-ad-manager/issues"
+	},
+	"homepage": "https://www.github.com/narcitymedia/react-native-ad-manager#readme",
+	"devDependencies": {
+		"@react-native-community/bob": "^0.16.2",
+		"@types/jest": "^26.0.4",
+		"@types/react": "^16.9.19",
+		"@types/react-native": "^0.63.1",
+		"jest": "^26.0.1",
+		"react": "16.11.0",
+		"react-native": "0.62.2",
+		"typescript": "^3.9.7"
+	},
+	"peerDependencies": {
+		"react": "*",
+		"react-native": "*"
+	},
+	"jest": {
+		"preset": "react-native",
+		"modulePathIgnorePatterns": [
+			"<rootDir>/example/node_modules",
+			"<rootDir>/lib/"
+		]
+	},
+	"@react-native-community/bob": {
+		"source": "src",
+		"output": "lib",
+		"targets": [
+			"commonjs",
+			"module",
+			"typescript"
+		]
+	}
 }
