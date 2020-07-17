@@ -1,9 +1,3 @@
-import { NativeModules } from 'react-native';
+export { RNBanner } from "./components/RNBanner/RNBanner";
+export { AdSize, AdSizeName, NumericAdSize } from "./constants/AdSize";
 
-type AdManagerType = {
-  multiply(a: number, b: number): Promise<number>;
-};
-
-const { AdManager } = NativeModules;
-
-export default AdManager as AdManagerType;

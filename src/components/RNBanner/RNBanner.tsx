@@ -100,27 +100,27 @@ export const RNBanner = forwardRef<RNBannerRef, RNBannerProps>((props, ref)=> {
     }
 
     function handleAdRequest() {
-
+        onAdRequest?.();
     }
 
     function handleAdFailedToLoad() {
-
+        onAdFailedToLoad?.();
     }
 
     function handleAdLoaded() {
-
+        onAdLoaded?.();
     }
 
     function handleAdClicked() {
-
+        onAdClicked?.();
     }
 
     function handleAdClosed() {
-
+        onAdClosed?.();
     }
 
     function handleNativeError() {
-        
+        onNativeError?.();
     }
 
     function handlePropsSet() {
