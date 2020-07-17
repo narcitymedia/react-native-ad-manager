@@ -4,8 +4,8 @@ export type NumericAdSize = [number, number];
 
 export const AdSize: Record<AdSizeName, NumericAdSize> = {
     BANNER: [320, 50],
-    FULL_BANNER: [468, 60],
     LARGE_BANNER: [320, 100],
-    LEADERBOARD: [728, 90],
-    MEDIUM_RECTANGLE: [300, 250]
+    MEDIUM_RECTANGLE: [300, 250],
+    FULL_BANNER: [468, 60],
+    LEADERBOARD: [728, 90]
 }
