@@ -21,6 +21,10 @@ class BannerViewManager: RCTViewManager {
             "simulatorTestId": kGADSimulatorID
         ]
     }
+	
+	override func view() -> UIView! {
+        return BannerView()
+    }
     
     @objc func addBannerView(_ node: NSNumber) {
         DispatchQueue.main.async {

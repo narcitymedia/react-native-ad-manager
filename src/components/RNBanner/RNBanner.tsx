@@ -1,10 +1,10 @@
 import React, { forwardRef, useImperativeHandle, useRef } from "react";
 import { findNodeHandle, requireNativeComponent, UIManager } from "react-native";
-import { AdState } from "src/constants/AdState";
-import { ViewState } from "src/constants/ViewState";
-import type { RNBannerProps } from "./RNBannerProps";
+import { AdState } from "../../constants/AdState";
+import { ViewState } from "../../constants/ViewState";
+import type { NativeAdClickEvent, NativeAdLoadErrorEvent, NativeAdLoadEvent, RNBannerProps } from "./RNBannerProps";
 
-interface RNBannerRef {
+export interface RNBannerRef {
     /**
      * Requests a banner fill from the Google Ad Manager SDK
      */
@@ -103,24 +103,20 @@ export const RNBanner = forwardRef<RNBannerRef, RNBannerProps>((props, ref)=> {
         onAdRequest?.();
     }
 
-    function handleAdFailedToLoad() {
-        onAdFailedToLoad?.();
+    function handleAdFailedToLoad(event: NativeAdLoadErrorEvent) {
+        onAdFailedToLoad?.(event.nativeEvent);
     }
 
-    function handleAdLoaded() {
-        onAdLoaded?.();
+    function handleAdLoaded(e: NativeAdLoadEvent) {
+        onAdLoaded?.(e.nativeEvent);
     }
 
-    function handleAdClicked() {
-        onAdClicked?.();
+    function handleAdClicked(event:  NativeAdClickEvent) {
+        onAdClicked?.(event.nativeEvent);
     }
 
     function handleAdClosed() {
         onAdClosed?.();
-    }
-
-    function handleNativeError() {
-        onNativeError?.();
     }
 
     function handlePropsSet() {
@@ -176,10 +172,15 @@ export const RNBanner = forwardRef<RNBannerRef, RNBannerProps>((props, ref)=> {
             onAdRequest={handleAdRequest}
             testDeviceIds={testDeviceIds}
             onAdClicked={handleAdClicked}
-            onNativeError={handleNativeError}
             onAdFailedToLoad={handleAdFailedToLoad}
         />
     );
 });
 
-const RNBannerView = requireNativeComponent<RNBannerProps>("RNBannerView");
+interface RNBannerViewProps extends Omit<RNBannerProps, "onAdFailedToLoad" | "onAdLoaded" | "onAdClicked"> {
+    onAdFailedToLoad(event: NativeAdLoadErrorEvent): void;
+    onAdLoaded(event: NativeAdLoadEvent): void;
+    onAdClicked(event: NativeAdClickEvent): void;
+}
+
+const RNBannerView = requireNativeComponent<RNBannerViewProps>("RNBannerView");

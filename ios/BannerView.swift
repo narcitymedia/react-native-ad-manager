@@ -19,7 +19,8 @@ let AD_LOADED = "AD_LOADED"
 
 class BannerView: UIView, GADAppEventDelegate, GADBannerViewDelegate, GADAdSizeDelegate {
 	var bannerView: DFPBannerView? = nil
-    var width: Int?, height: Int? = nil
+	var width: Int? = nil
+	var height: Int? = nil
     var isAdUnitSet: Bool = false
 	
 	@objc var onAdClicked: RCTDirectEventBlock?
@@ -70,7 +71,7 @@ class BannerView: UIView, GADAppEventDelegate, GADBannerViewDelegate, GADAdSizeD
     }
 
     func destroyAdView(){
-        if(bannerView != nil){
+        if bannerView != nil {
             bannerView?.removeFromSuperview()
         }
     }
@@ -127,17 +128,17 @@ class BannerView: UIView, GADAppEventDelegate, GADBannerViewDelegate, GADAdSizeD
 
     func adView(_ banner: GADBannerView, didReceiveAppEvent name: String, withInfo info: String?) {
         switch name {
-        case AD_CLICKED:
-            print("\(LOG_TAG): Ad clicked")
-            onAdClicked!(["url": info])
-            break
-        case AD_CLOSED:
-            print("\(LOG_TAG): Ad closed")
-            destroyAdView()
-            onAdClosed!([:])
-            break
-        default:
-            break
+			case AD_CLICKED:
+				print("\(LOG_TAG): Ad clicked")
+				onAdClicked!(["url": info])
+				break
+			case AD_CLOSED:
+				print("\(LOG_TAG): Ad closed")
+				destroyAdView()
+				onAdClosed!([:])
+				break
+			default:
+				break
         }
     }
 
@@ -166,7 +167,7 @@ class BannerView: UIView, GADAppEventDelegate, GADBannerViewDelegate, GADAdSizeD
     }
 
     @objc func destroyBanner() {
-        if(bannerView != nil) {
+        if bannerView != nil {
             destroyAdView()
         }
     }
