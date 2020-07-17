@@ -1,6 +1,0 @@
-framework module Pods_AdManager {
-  umbrella header "Pods-AdManager-umbrella.h"
-
-  export *
-  module * { export * }
-}
