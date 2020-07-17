@@ -19,7 +19,7 @@ This component will automatically handle ad requests on mount, sizing as well as
 ```typescript
 import { RNAutomaticBanner, AdSize, AdLoadEvent, AdLoadErrorEvent, AdClickEvent } from "react-native-ad-manager";
 
-export const SomeComponent: FC => () = {
+export const SomeComponent: FC = () => {
 
     function onAdRequest() {
         console.log("A new ad request is in progress");
@@ -62,7 +62,7 @@ This component gives you more freedom by giving you full control over the whole 
 ```typescript
 import { RNBanner, RNBannerRef, AdSize, NumericAdSize, AdLoadEvent, AdLoadErrorEvent, AdClickEvent } from "react-native-ad-manager";
 
-export const SomeComponent: FC => () = {
+export const SomeComponent: FC = () => {
     const [size, setSize] = useState<NumericAdSize>([0, 0]);
 
     const banner = useRef<RNBannerRef>(null);
