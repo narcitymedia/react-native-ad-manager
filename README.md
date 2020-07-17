@@ -17,7 +17,7 @@ Considering this repository is private and the package has not been published to
 This component will automatically handle ad requests on mount, sizing as well as cleanup on unmount.
 
 ```typescript
-import { RNAutomaticBanner, AdSize, AdLoadEvent, AdLoadErrorEvent, AdClickEvent } from "react-native-ad-manager";
+import { RNAutomaticBanner, AdSize, AdLoadEvent, AdLoadErrorEvent, AdClickEvent, simulatorTestId } from "react-native-ad-manager";
 
 export const SomeComponent: FC = () => {
 
@@ -48,6 +48,7 @@ export const SomeComponent: FC = () => {
             onAdClosed={onAdClosed}
             onAdRequest={onAdRequest}
             onAdClicked={onAdClicked}
+            testDeviceIds={[simulatorTestId]}
             onAdFailedToLoad={onAdFailedToLoad}
             adSizes={[AdSize.BANNER, AdSize.MEDIUM_RECTANGLE]}
         />
@@ -60,7 +61,7 @@ export const SomeComponent: FC = () => {
 This component gives you more freedom by giving you full control over the whole process.
 
 ```typescript
-import { RNBanner, RNBannerRef, AdSize, NumericAdSize, AdLoadEvent, AdLoadErrorEvent, AdClickEvent } from "react-native-ad-manager";
+import { RNBanner, RNBannerRef, AdSize, NumericAdSize, AdLoadEvent, AdLoadErrorEvent, AdClickEvent, simulatorTestId } from "react-native-ad-manager";
 
 export const SomeComponent: FC = () => {
     const [size, setSize] = useState<NumericAdSize>([0, 0]);
@@ -106,6 +107,7 @@ export const SomeComponent: FC = () => {
             onAdClosed={onAdClosed}
             onAdRequest={onAdRequest}
             onAdClicked={onAdClicked}
+            testDeviceIds={[simulatorTestId]}
             onAdFailedToLoad={onAdFailedToLoad}
             style={{ width: size[0], height: size[1] }}
             adSizes={[AdSize.BANNER, AdSize.MEDIUM_RECTANGLE]}
