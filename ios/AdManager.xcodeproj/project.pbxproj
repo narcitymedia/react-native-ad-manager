@@ -7,8 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1CACA2B224C20D5F00C0EB91 /* RNAdManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CACA2B124C20D5F00C0EB91 /* RNAdManager.swift */; };
+		1CACA2B424C20DF000C0EB91 /* BannerViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CACA2B324C20DF000C0EB91 /* BannerViewManager.swift */; };
+		1CACA2B624C20E4500C0EB91 /* BannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CACA2B524C20E4500C0EB91 /* BannerView.swift */; };
+		1CACA2B824C20F4000C0EB91 /* RNAdManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1CACA2B724C20F4000C0EB91 /* RNAdManager.m */; };
 		A7A89BADDC0191818E8AE87E /* Pods_AdManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47CB52EA10E455BB843FC6A1 /* Pods_AdManager.framework */; };
-		F4FF95D7245B92E800C19C63 /* AdManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4FF95D6245B92E800C19C63 /* AdManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,12 +28,14 @@
 
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libAdManager.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libAdManager.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		1CACA2B124C20D5F00C0EB91 /* RNAdManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNAdManager.swift; sourceTree = "<group>"; };
+		1CACA2B324C20DF000C0EB91 /* BannerViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerViewManager.swift; sourceTree = "<group>"; };
+		1CACA2B524C20E4500C0EB91 /* BannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerView.swift; sourceTree = "<group>"; };
+		1CACA2B724C20F4000C0EB91 /* RNAdManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNAdManager.m; sourceTree = "<group>"; };
 		47CB52EA10E455BB843FC6A1 /* Pods_AdManager.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AdManager.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E2D914637EB23182ECEE9DD /* Pods-AdManager.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AdManager.debug.xcconfig"; path = "Target Support Files/Pods-AdManager/Pods-AdManager.debug.xcconfig"; sourceTree = "<group>"; };
 		A1DD41A16558D9BB418E474A /* Pods-AdManager.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AdManager.release.xcconfig"; path = "Target Support Files/Pods-AdManager/Pods-AdManager.release.xcconfig"; sourceTree = "<group>"; };
-		B3E7B5891CC2AC0600A0062D /* AdManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdManager.m; sourceTree = "<group>"; };
 		F4FF95D5245B92E700C19C63 /* AdManager-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AdManager-Bridging-Header.h"; sourceTree = "<group>"; };
-		F4FF95D6245B92E800C19C63 /* AdManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,15 +64,16 @@
 				7E2D914637EB23182ECEE9DD /* Pods-AdManager.debug.xcconfig */,
 				A1DD41A16558D9BB418E474A /* Pods-AdManager.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
-				F4FF95D6245B92E800C19C63 /* AdManager.swift */,
-				B3E7B5891CC2AC0600A0062D /* AdManager.m */,
+				1CACA2B724C20F4000C0EB91 /* RNAdManager.m */,
+				1CACA2B524C20E4500C0EB91 /* BannerView.swift */,
+				1CACA2B324C20DF000C0EB91 /* BannerViewManager.swift */,
+				1CACA2B124C20D5F00C0EB91 /* RNAdManager.swift */,
 				F4FF95D5245B92E700C19C63 /* AdManager-Bridging-Header.h */,
 				134814211AA4EA7D00B7C361 /* Products */,
 				52B3773559322A8D2212429D /* Pods */,
@@ -166,7 +172,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F4FF95D7245B92E800C19C63 /* AdManager.swift in Sources */,
+				1CACA2B624C20E4500C0EB91 /* BannerView.swift in Sources */,
+				1CACA2B224C20D5F00C0EB91 /* RNAdManager.swift in Sources */,
+				1CACA2B424C20DF000C0EB91 /* BannerViewManager.swift in Sources */,
+				1CACA2B824C20F4000C0EB91 /* RNAdManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
