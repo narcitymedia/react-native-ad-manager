@@ -26,7 +26,7 @@ export const SomeComponent: FC = () => {
     }
 
     function onAdLoaded(event: AdLoadEvent) {
-        console.log(`A ${event.width} x ${event.height} ad was succesfully laoded`);
+        console.log(`A ${event.width} x ${event.height} ad was succesfully loaded`);
     }
 
     function onAdFailedToLoad(event: AdLoadErrorEvent) {
@@ -83,7 +83,7 @@ export const SomeComponent: FC = () => {
     function onAdLoaded(event: AdLoadEvent) {
         banner.current?.addBannerView();
         setSize([event.width, event.height]);
-        console.log(`A ${event.width} x ${event.height} ad was succesfully laoded`);
+        console.log(`A ${event.width} x ${event.height} ad was succesfully loaded`);
     }
 
     function onAdFailedToLoad(event: AdLoadErrorEvent) {
