@@ -91,7 +91,21 @@ class BannerView(context: Context): ReactViewGroup(context) {
 	}
 
 	fun setTargeting(targeting: ReadableMap) {
+		targeting.toHashMap().forEach { entry ->
+			if (entry.value is ReadableArray) {
+				this.adRequestBuilder.addCustomTargeting(
+					entry.key,
+					(entry.value as ReadableArray)
+						.toArrayList()
+						.map { it.toString() }
+						.toMutableList()
+				)
+			}
 
+			else {
+				this.adRequestBuilder.addCustomTargeting(entry.key, entry.value.toString())
+			}
+		}
 	}
 	// endregion
 
