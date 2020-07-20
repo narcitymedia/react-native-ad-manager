@@ -2,10 +2,12 @@ package com.reactnativeadmanager
 
 import android.content.Context
 import android.util.Log
+import com.facebook.react.bridge.ReactContext
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.views.view.ReactViewGroup
 import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.RequestConfiguration
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest
 import com.google.android.gms.ads.doubleclick.PublisherAdView
@@ -54,7 +56,14 @@ class BannerView(context: Context): ReactViewGroup(context) {
 	}
 
 	fun openDebugMenu() {
+		if (this.adView.adUnitId.isNullOrEmpty()) {
+			return;
+		}
 
+		MobileAds.openDebugMenu(
+			(context as ReactContext).currentActivity,
+			this.adView.adUnitId
+		)
 	}
 	// endregion
 
