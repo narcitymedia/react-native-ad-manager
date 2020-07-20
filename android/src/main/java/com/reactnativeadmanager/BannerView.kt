@@ -1,10 +1,13 @@
 package com.reactnativeadmanager
 
 import android.content.Context
+import android.util.Log
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.views.view.ReactViewGroup
 import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.RequestConfiguration
+import com.google.android.gms.ads.doubleclick.PublisherAdRequest
 import com.google.android.gms.ads.doubleclick.PublisherAdView
 import java.lang.Exception
 import java.util.Arrays
@@ -12,7 +15,8 @@ import java.util.Arrays
 
 class BannerView(context: Context): ReactViewGroup(context) {
 
-	private var adView: PublisherAdView? = null;
+	private var adView: PublisherAdView = PublisherAdView(context);
+	private var adRequestBuilder: PublisherAdRequest.Builder = PublisherAdRequest.Builder();
 
 	// region PRIVATE METHODS
 	private fun loadAd() {
@@ -56,12 +60,10 @@ class BannerView(context: Context): ReactViewGroup(context) {
 
 	// region PROP SETTERS
 	fun setAdUnitId(adUnitId: String) {
-		this.ensureAdViewCreated()
-		this.adView?.adUnitId = adUnitId
+		this.adView.adUnitId = adUnitId
 	}
 
 	fun setAdSizes(adSizes: ReadableArray) {
-		this.ensureAdViewCreated()
 		val computedSizes: List<AdSize> = adSizes.toArrayList().map {
 			try {
 				val size = it as Array<Int>
@@ -69,29 +71,31 @@ class BannerView(context: Context): ReactViewGroup(context) {
 			}
 
 			catch (exception: Exception) {
+				Log.w(AdManagerModule.MODULE_NAME, "Unable to parse ad size - ${exception.localizedMessage}")
 				AdSize.INVALID
 			}
 		}
 
-		this.adView?.setAdSizes(*computedSizes.toTypedArray())
+		this.adView.setAdSizes(*computedSizes.toTypedArray())
 	}
 
 	fun setTestDeviceIds(testDeviceIds: ReadableArray) {
-		this.ensureAdViewCreated()
+		try {
+			val devices = testDeviceIds.toArrayList().toMutableList() as MutableList<String>
+			RequestConfiguration.Builder().setTestDeviceIds(devices).build()
+		}
+
+		catch (exception: Exception) {
+			Log.w(AdManagerModule.MODULE_NAME, "Unable to parse testDeviceIds - ${exception.localizedMessage}")
+		}
 	}
 
 	fun setTargeting(targeting: ReadableMap) {
-		this.ensureAdViewCreated()
+
 	}
 	// endregion
 
 	// region UTILITY METHODS
-	private fun ensureAdViewCreated() {
-		if (this.adView != null) {
-			return;
-		}
 
-		this.adView = PublisherAdView(this.context)
-	}
 	// endregion
 }
