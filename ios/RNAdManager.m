@@ -41,5 +41,6 @@ RCT_EXTERN_METHOD(addBannerView:(nonnull NSNumber *)node)
 RCT_EXTERN_METHOD(loadBanner:(nonnull NSNumber *)node)
 RCT_EXTERN_METHOD(destroyBanner:(nonnull NSNumber *)node)
 RCT_EXTERN_METHOD(removeBannerView:(nonnull NSNumber *)node)
+RCT_EXTERN_METHOD(openDebugMenu:(nonnull NSNumber *)node)
 
 @end

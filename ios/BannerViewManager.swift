@@ -53,4 +53,11 @@ class BannerViewManager: RCTViewManager {
             component.removeBannerView()
         }
     }
+	
+	@objc func openDebugMenu(_ node: NSNumber) {
+		DispatchQueue.main.async {
+            let component = self.bridge.uiManager.view(forReactTag: node) as! BannerView
+            component.openDebugMenu()
+        }
+	}
 }

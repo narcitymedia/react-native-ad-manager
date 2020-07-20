@@ -185,4 +185,14 @@ class BannerView: UIView, GADAppEventDelegate, GADBannerViewDelegate, GADAdSizeD
             removeAdView()
         }
     }
+	
+	@objc func openDebugMenu() {
+		if self.adId == nil {
+			return
+		}
+		
+		let rootViewController = UIApplication.shared.delegate?.window??.rootViewController
+		let debugViewController = GADDebugOptionsViewController(adUnitID: self.adId!)
+		rootViewController?.present(debugViewController, animated: true, completion: nil)
+	}
 }

@@ -1,5 +1,5 @@
 import React, { forwardRef, useImperativeHandle, useRef } from "react";
-import { findNodeHandle, Platform, requireNativeComponent, UIManager } from "react-native";
+import { findNodeHandle, requireNativeComponent, UIManager } from "react-native";
 import { AdState } from "../../constants/AdState";
 import { ViewState } from "../../constants/ViewState";
 import type { NativeAdClickEvent, NativeAdLoadErrorEvent, NativeAdLoadEvent, RNBannerProps } from "./RNBannerProps";
@@ -27,13 +27,12 @@ export interface RNBannerRef {
 
     /**
      * Opens the debug menu for the current ad instance
-     * @platform android
      */
     openDebugMenu(): void;
 }
 
 export const RNBanner = forwardRef<RNBannerRef, RNBannerProps>((props, ref)=> {
-    const { targeting = {}, testDeviceIds = [], onAdRequest, onAdFailedToLoad, onAdLoaded, onAdClicked, onAdClosed, onNativeError, onPropsSet, ...rest } = props;
+    const { targeting = {}, testDeviceIds = [], onAdRequest, onAdFailedToLoad, onAdLoaded, onAdClicked, onAdClosed, onPropsSet, ...rest } = props;
 
     const bannerViewRef = useRef<any>(null);
     const arePropsSet = useRef<boolean>(false);
@@ -110,7 +109,7 @@ export const RNBanner = forwardRef<RNBannerRef, RNBannerProps>((props, ref)=> {
      * Opens the debug menu for the current ad instance
      */
     function openDebugMenu() {
-        if (!arePropsSet.current || Platform.OS !== "android") {
+        if (!arePropsSet.current) {
             return;
         }
 
