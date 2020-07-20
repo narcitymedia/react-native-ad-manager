@@ -4,6 +4,7 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.Promise
+import com.google.android.gms.ads.doubleclick.PublisherAdRequest
 
 class AdManagerModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
 
@@ -15,14 +16,9 @@ class AdManagerModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
         return AdManagerModule.MODULE_NAME
     }
 
-    // Example method
-    // See https://facebook.github.io/react-native/docs/native-modules-android
-    @ReactMethod
-    fun multiply(a: Int, b: Int, promise: Promise) {
-
-      promise.resolve(a * b)
-
-    }
-
-
+	override fun getConstants(): MutableMap<String, Any> {
+		return mutableMapOf<String, Any>(
+			"simulatorTestId" to PublisherAdRequest.DEVICE_ID_EMULATOR
+		)
+	}
 }

@@ -52,23 +52,30 @@ class BannerView(context: Context): ReactViewGroup(context) {
 
 	// region PROP SETTERS
 	fun setAdUnitId(adUnitId: String) {
-
+		this.ensureAdViewCreated()
+		this.adView?.adUnitId = adUnitId
 	}
 
 	fun setAdSizes(adSizes: ReadableArray) {
-
+		this.ensureAdViewCreated()
 	}
 
 	fun setTestDeviceIds(testDeviceIds: ReadableArray) {
-
+		this.ensureAdViewCreated()
 	}
 
 	fun setTargeting(targeting: ReadableMap) {
-
+		this.ensureAdViewCreated()
 	}
 	// endregion
 
 	// region UTILITY METHODS
+	private fun ensureAdViewCreated() {
+		if (this.adView != null) {
+			return;
+		}
 
+		this.adView = PublisherAdView(this.context)
+	}
 	// endregion
 }
