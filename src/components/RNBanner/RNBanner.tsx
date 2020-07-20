@@ -128,7 +128,7 @@ export const RNBanner = forwardRef<RNBannerRef, RNBannerProps>((props, ref)=> {
         onAdLoaded?.(e.nativeEvent);
     }
 
-    function handleAdClicked(event:  NativeAdClickEvent) {
+    function handleAdClicked(event: NativeAdClickEvent) {
         onAdClicked?.(event.nativeEvent);
     }
 

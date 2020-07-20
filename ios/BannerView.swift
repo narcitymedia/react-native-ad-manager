@@ -17,11 +17,9 @@ let AD_CLOSED = "AD_CLOSED"
 let AD_FAILED = "AD_FAILED"
 let AD_LOADED = "AD_LOADED"
 
-class BannerView: UIView, GADAppEventDelegate, GADBannerViewDelegate, GADAdSizeDelegate {
-	var bannerView: DFPBannerView? = nil
-	var width: Int? = nil
-	var height: Int? = nil
-    var isAdUnitSet: Bool = false
+class BannerView: UIView, GADAppEventDelegate, GADBannerViewDelegate {
+	var adRequest: DFPRequest = DFPRequest()
+	var bannerView: DFPBannerView = DFPBannerView()
 	
 	@objc var onAdClicked: RCTDirectEventBlock?
     @objc var onAdClosed: RCTDirectEventBlock?
@@ -30,27 +28,25 @@ class BannerView: UIView, GADAppEventDelegate, GADBannerViewDelegate, GADAdSizeD
     @objc var onAdRequest: RCTDirectEventBlock?
     @objc var onPropsSet: RCTDirectEventBlock? {
         didSet {
-            sendIfPropsSet()
+			self.sendIfPropsSet()
         }
     }
 	
 	@objc var adId: String? = nil {
         didSet {
-            if(isAdUnitSet == false){
-                sendIfPropsSet()
-                isAdUnitSet = true
-            }
+			self.bannerView.adUnitID = self.adId
+			self.sendIfPropsSet()
         }
     }
 
     @objc var adSizes: Array<Array<Int>>? = nil {
         didSet {
-            sendIfPropsSet()
+			self.sendIfPropsSet()
         }
     }
 
-    @objc var targeting: NSDictionary? = [:]
-    @objc var testDeviceIds: Array<String>? = [""]
+    @objc var targeting: NSDictionary = [:]
+    @objc var testDeviceIds: Array<String> = [""]
 	
 	override init(frame: CGRect) {
         super.init(frame: frame)
@@ -67,22 +63,17 @@ class BannerView: UIView, GADAppEventDelegate, GADBannerViewDelegate, GADAdSizeD
     }
 
     func addAdView(){
-        self.addSubview(bannerView!)
+        self.addSubview(bannerView)
     }
 
     func destroyAdView(){
-        if bannerView != nil {
-            bannerView?.removeFromSuperview()
-        }
+		self.bannerView.removeFromSuperview()
     }
 
-    func createAdView(){
-        bannerView = DFPBannerView.init()
-
+    func prepareBannerView(){
         let rootViewController = UIApplication.shared.delegate?.window??.rootViewController
 
         var validAdSizes = [NSValue]()
-
         let adSizesArray = adSizes ?? []
 
         for sizes in adSizesArray {
@@ -91,13 +82,12 @@ class BannerView: UIView, GADAppEventDelegate, GADBannerViewDelegate, GADAdSizeD
             let customGADAdSize = GADAdSizeFromCGSize(CGSize(width: width, height: height))
             validAdSizes.append(NSValueFromGADAdSize(customGADAdSize))
         }
-
-        bannerView?.rootViewController = rootViewController
-        bannerView?.delegate = self
-        bannerView?.adSizeDelegate = self
-        bannerView?.translatesAutoresizingMaskIntoConstraints = false
-        bannerView?.appEventDelegate = self
-        bannerView?.validAdSizes = validAdSizes
+		
+        bannerView.delegate = self
+        bannerView.appEventDelegate = self
+        bannerView.validAdSizes = validAdSizes
+        bannerView.rootViewController = rootViewController
+        bannerView.translatesAutoresizingMaskIntoConstraints = false
     }
 
     func removeAdView() {
@@ -105,85 +95,82 @@ class BannerView: UIView, GADAppEventDelegate, GADBannerViewDelegate, GADAdSizeD
     }
 
     func loadAd(){
-        bannerView?.adUnitID = adId
+		self.prepareBannerView()
+        var customTargeting: [AnyHashable: Any] = [:]
 
-        let adRequest = DFPRequest()
-        var dict: [AnyHashable: Any] = [:]
-
-        for key in targeting!.allKeys {
-            dict[key as! String] = targeting![key]
+		for key in self.targeting.allKeys {
+			customTargeting[key as! String] = self.targeting[key]
         }
+		
+		self.adRequest.testDevices = testDeviceIds
+		self.adRequest.customTargeting = customTargeting
 
-        adRequest.customTargeting = dict
-        adRequest.testDevices = testDeviceIds
-
-        onAdRequest!([:])
-        bannerView?.load(adRequest)
+		bannerView.load(self.adRequest)
+		
+		if self.onAdRequest != nil {
+			self.onAdRequest!([:])
+		}
     }
 
     func adViewDidReceiveAd(_ bannerView: GADBannerView) {
         print("\(LOG_TAG): Ad loaded")
-        onAdLoaded!(["width": width,"height": height])
+		
+		if (self.onAdLoaded == nil) {
+			return;
+		}
+		
+        onAdLoaded!([
+			"width": self.bannerView.adSize.size.width,
+			"height": self.bannerView.adSize.size.height
+		])
     }
 
     func adView(_ banner: GADBannerView, didReceiveAppEvent name: String, withInfo info: String?) {
         switch name {
 			case AD_CLICKED:
 				print("\(LOG_TAG): Ad clicked")
-				onAdClicked!(["url": info])
+				
+				if self.onAdClicked != nil {
+					self.onAdClicked!(["url": info])
+				}
 				break
 			case AD_CLOSED:
 				print("\(LOG_TAG): Ad closed")
 				destroyAdView()
-				onAdClosed!([:])
+				
+				if self.onAdClosed != nil {
+					self.onAdClosed!([:])
+				}
 				break
 			default:
 				break
         }
     }
 
-    func adView(_ bannerView: GADBannerView, willChangeAdSizeTo size: GADAdSize) {
-        print("\(LOG_TAG): Ad size changed")
-        if let adSize = adSizes?.first(where: {
-            let customGADAdSize = GADAdSizeFromCGSize(CGSize(width: $0[0], height: $0[1]))
-            return GADAdSizeEqualToSize(customGADAdSize, size)
-        }) {
-            width = adSize[0]
-            height = adSize[1]
-        }
-    }
-
     func adView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: GADRequestError) {
         print("\(LOG_TAG): Ad failed to load. Reason: \(error.localizedDescription)")
-        onAdFailedToLoad!(["errorMessage": error.localizedDescription])
+		
+		if self.onAdFailedToLoad != nil {
+			onAdFailedToLoad!(["errorMessage": error.localizedDescription])
+		}
     }
 
     @objc func addBannerView() {
-        if bannerView == nil {
-            createAdView()
-        }
-		
-        addAdView()
+		self.addAdView()
     }
 
     @objc func destroyBanner() {
-        if bannerView != nil {
-            destroyAdView()
+		if self.bannerView != nil {
+			self.destroyAdView()
         }
     }
 
     @objc func loadBanner() {
-        if bannerView == nil {
-            createAdView()
-        }
-		
-        loadAd()
+		self.loadAd()
     }
 
     @objc func removeBannerView() {
-        if bannerView != nil {
-            removeAdView()
-        }
+		self.removeAdView()
     }
 	
 	@objc func openDebugMenu() {
