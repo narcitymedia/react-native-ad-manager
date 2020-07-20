@@ -4,7 +4,7 @@ import type { NumericAdSize } from "src/constants/AdSize";
 export interface RNBannerProps {
     adId: string;
     adSizes: NumericAdSize[];
-    targeting?: object;
+    targeting?: Record<string, string | any[]>;
     style?: StyleProp<ViewStyle>;
     testDeviceIds?: string[];
 
