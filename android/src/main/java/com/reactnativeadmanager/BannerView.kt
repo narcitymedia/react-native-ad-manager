@@ -23,11 +23,17 @@ class BannerView(context: Context): ReactViewGroup(context) {
 
 	// region PRIVATE METHODS
 	private fun loadAd() {
+		this.setAdEventListeners()
 		this.sendJSEvent(AdEvent.REQUEST);
 		this.adView.loadAd(this.adRequestBuilder.build())
 	}
 
 	private fun addAdView() {
+		if (this.childCount != 0) {
+			Log.w(AdManagerModule.MODULE_NAME, "Tried to add view while a child is already present")
+			return;
+		}
+
 		this.addView(this.adView)
 	}
 
@@ -46,51 +52,6 @@ class BannerView(context: Context): ReactViewGroup(context) {
 	}
 
 	fun addBannerView() {
-		this.adView.adListener = object: AdListener() {
-			override fun onAdLoaded() {
-				super.onAdLoaded()
-
-				Log.d(AdManagerModule.MODULE_NAME, "Ad loaded")
-
-				val event = Arguments.createMap()
-				event.putInt("width", adView.adSize.width)
-				event.putInt("height", adView.adSize.height)
-
-				sendJSEvent(AdEvent.LOADED, event)
-			}
-
-			override fun onAdFailedToLoad(code: Int) {
-				val errorMessage = getMessageForAdCode(code)
-				Log.d(AdManagerModule.MODULE_NAME, "Ad failed to load - $errorMessage")
-
-				val event = Arguments.createMap()
-				event.putString("errorMessage", errorMessage)
-
-				sendJSEvent(AdEvent.FAILED, event)
-			}
-		}
-
-		this.adView.appEventListener = object: Activity(), AppEventListener {
-			override fun onAppEvent(name: String?, info: String?) {
-				when(name) {
-					AdEvent.CLICKED.name -> {
-						Log.d(AdManagerModule.MODULE_NAME, "Ad clicked - $info")
-
-						val event = Arguments.createMap()
-						event.putString("url", info)
-
-						sendJSEvent(AdEvent.CLICKED, event)
-					}
-					AdEvent.CLOSED.name -> {
-						Log.d(AdManagerModule.MODULE_NAME, "Ad closed - $info")
-
-						destroyAdView()
-						sendJSEvent(AdEvent.CLOSED)
-					}
-				}
-			}
-		}
-
 		this.addAdView()
 	}
 
@@ -116,31 +77,30 @@ class BannerView(context: Context): ReactViewGroup(context) {
 
 	// region PROP SETTERS
 	fun setAdUnitId(adUnitId: String) {
-		if (this.adView.adUnitId.isNullOrEmpty()) {
-			this.maybeSendPropSetEvent()
-		}
-
 		this.adView.adUnitId = adUnitId
+		this.maybeSendPropSetEvent()
 	}
 
 	fun setAdSizes(adSizes: ReadableArray) {
-		val computedSizes: List<AdSize> = adSizes.toArrayList().map {
-			try {
-				val size = it as Array<Int>
-				AdSize(size[0], size[1])
+		val computedSizes = ArrayList<AdSize>()
+
+		for (i in 0 until adSizes.size()) {
+			val size = adSizes.getArray(i);
+
+			if (size == null || size.size() != 2) {
+				continue
 			}
 
-			catch (exception: Exception) {
-				Log.w(AdManagerModule.MODULE_NAME, "Unable to parse ad size - ${exception.localizedMessage}")
-				AdSize.INVALID
-			}
-		}
-
-		if (this.adView.adSizes.isEmpty()) {
-			this.maybeSendPropSetEvent()
+			computedSizes.add(
+				AdSize(
+					size.getInt(0),
+					size.getInt(1)
+				)
+			)
 		}
 
 		this.adView.setAdSizes(*computedSizes.toTypedArray())
+		this.maybeSendPropSetEvent()
 	}
 
 	fun setTestDeviceIds(testDeviceIds: ReadableArray) {
@@ -205,6 +165,62 @@ class BannerView(context: Context): ReactViewGroup(context) {
 			PublisherAdRequest.ERROR_CODE_NETWORK_ERROR -> "Network error"
 			PublisherAdRequest.ERROR_CODE_NO_FILL -> "No fill"
 			else -> "Could not retrieve message. Unknown code: $code"
+		}
+	}
+
+	private fun setAdEventListeners() {
+		this.adView.adListener = object: AdListener() {
+			override fun onAdLoaded() {
+				super.onAdLoaded()
+
+				Log.d(AdManagerModule.MODULE_NAME, "Ad loaded")
+
+				val width = adView.adSize.width
+				val height = adView.adSize.height
+
+				adView.measure(width, height);
+				adView.layout(0, 0, adView.adSize.getWidthInPixels(context), adView.adSize.getHeightInPixels(context));
+
+				val event = Arguments.createMap()
+				event.putInt("width", width)
+				event.putInt("height", height)
+
+				sendJSEvent(AdEvent.LOADED, event)
+			}
+
+			override fun onAdFailedToLoad(code: Int) {
+				super.onAdFailedToLoad(code)
+
+				val errorMessage = getMessageForAdCode(code)
+				Log.d(AdManagerModule.MODULE_NAME, "Ad failed to load - $errorMessage")
+
+				val event = Arguments.createMap()
+				event.putString("errorMessage", errorMessage)
+
+				sendJSEvent(AdEvent.FAILED, event)
+			}
+		}
+
+		this.adView.appEventListener = object: Activity(), AppEventListener {
+			override fun onAppEvent(name: String?, info: String?) {
+				Log.d(AdManagerModule.MODULE_NAME, "$name - $info")
+				when(name) {
+					AdEvent.CLICKED.name -> {
+						Log.d(AdManagerModule.MODULE_NAME, "Ad clicked - $info")
+
+						val event = Arguments.createMap()
+						event.putString("url", info)
+
+						sendJSEvent(AdEvent.CLICKED, event)
+					}
+					AdEvent.CLOSED.name -> {
+						Log.d(AdManagerModule.MODULE_NAME, "Ad closed - $info")
+
+						destroyAdView()
+						sendJSEvent(AdEvent.CLOSED)
+					}
+				}
+			}
 		}
 	}
 	// endregion

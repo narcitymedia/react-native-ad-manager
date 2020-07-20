@@ -10,6 +10,7 @@ import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.reactnativeadmanager.constants.AdEvent
 import com.reactnativeadmanager.constants.Command
+import kotlin.reflect.typeOf
 
 class BannerViewManager: ViewGroupManager<BannerView>() {
 
@@ -51,10 +52,6 @@ class BannerViewManager: ViewGroupManager<BannerView>() {
 				MapBuilder.of(
 					"phasedRegistrationNames",
 					MapBuilder.of("bubbled", "onAdRequest")))
-			.put(AdEvent.NATIVE_ERROR.name,
-				MapBuilder.of(
-					"phasedRegistrationNames",
-					MapBuilder.of("bubbled", "onNativeError")))
 			.put(AdEvent.PROPS_SET.name,
 				MapBuilder.of(
 					"phasedRegistrationNames",
