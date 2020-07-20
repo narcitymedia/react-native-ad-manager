@@ -24,6 +24,11 @@ export interface RNBannerRef {
      * Removes a native banner view from the layout tree
      */
     removeBannerView(): void;
+
+    /**
+     * Opens the debug menu for the current ad instance
+     */
+    openDebugMenu(): void;
 }
 
 export const RNBanner = forwardRef<RNBannerRef, RNBannerProps>((props, ref)=> {
@@ -40,7 +45,8 @@ export const RNBanner = forwardRef<RNBannerRef, RNBannerProps>((props, ref)=> {
         loadBanner,
         destroyBanner,
         addBannerView,
-        removeBannerView
+        removeBannerView,
+        openDebugMenu
     }));
 
     /**
@@ -98,6 +104,17 @@ export const RNBanner = forwardRef<RNBannerRef, RNBannerProps>((props, ref)=> {
         viewState.current = ViewState.REMOVED;
         dispatchCommand("removeBannerView");
     }
+
+    /**
+     * Opens the debug menu for the current ad instance
+     */
+    function openDebugMenu() {
+        if (!arePropsSet.current) {
+            return;
+        }
+
+        dispatchCommand("openDebugMenu");
+    };
 
     function handleAdRequest() {
         onAdRequest?.();

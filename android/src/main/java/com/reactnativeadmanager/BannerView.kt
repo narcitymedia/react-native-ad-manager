@@ -13,6 +13,7 @@ import com.google.android.gms.ads.RequestConfiguration
 import com.google.android.gms.ads.doubleclick.AppEventListener
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest
 import com.google.android.gms.ads.doubleclick.PublisherAdView
+import com.google.android.gms.ads.initialization.InitializationStatus
 import com.reactnativeadmanager.constants.AdEvent
 import java.lang.Exception
 
@@ -68,10 +69,17 @@ class BannerView(context: Context): ReactViewGroup(context) {
 			return
 		}
 
-		MobileAds.openDebugMenu(
-			(context as ReactContext).currentActivity,
-			this.adView.adUnitId
-		)
+		try {
+			MobileAds.openDebugMenu(
+				(context as ReactContext).currentActivity,
+				this.adView.adUnitId
+			)
+		}
+
+		catch (exception: Exception) {
+			MobileAds.initialize(context)
+			this.openDebugMenu()
+		}
 	}
 	// endregion
 
