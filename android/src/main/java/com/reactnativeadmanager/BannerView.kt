@@ -4,7 +4,11 @@ import android.content.Context
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.views.view.ReactViewGroup
+import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.doubleclick.PublisherAdView
+import java.lang.Exception
+import java.util.Arrays
+
 
 class BannerView(context: Context): ReactViewGroup(context) {
 
@@ -58,6 +62,18 @@ class BannerView(context: Context): ReactViewGroup(context) {
 
 	fun setAdSizes(adSizes: ReadableArray) {
 		this.ensureAdViewCreated()
+		val computedSizes: List<AdSize> = adSizes.toArrayList().map {
+			try {
+				val size = it as Array<Int>
+				AdSize(size[0], size[1])
+			}
+
+			catch (exception: Exception) {
+				AdSize.INVALID
+			}
+		}
+
+		this.adView?.setAdSizes(*computedSizes.toTypedArray())
 	}
 
 	fun setTestDeviceIds(testDeviceIds: ReadableArray) {
