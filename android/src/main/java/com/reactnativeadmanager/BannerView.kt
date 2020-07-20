@@ -1,19 +1,20 @@
 package com.reactnativeadmanager
 
+import android.app.Activity
 import android.content.Context
 import android.util.Log
 import com.facebook.react.bridge.*
 import com.facebook.react.uimanager.events.RCTEventEmitter
 import com.facebook.react.views.view.ReactViewGroup
+import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.RequestConfiguration
+import com.google.android.gms.ads.doubleclick.AppEventListener
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest
 import com.google.android.gms.ads.doubleclick.PublisherAdView
 import com.reactnativeadmanager.constants.AdEvent
 import java.lang.Exception
-import java.util.Arrays
-
 
 class BannerView(context: Context): ReactViewGroup(context) {
 
@@ -22,7 +23,8 @@ class BannerView(context: Context): ReactViewGroup(context) {
 
 	// region PRIVATE METHODS
 	private fun loadAd() {
-
+		this.sendJSEvent(AdEvent.REQUEST);
+		this.adView.loadAd(this.adRequestBuilder.build())
 	}
 
 	private fun addAdView() {
@@ -40,20 +42,64 @@ class BannerView(context: Context): ReactViewGroup(context) {
 
 	// region PUBLIC METHODS
 	fun loadBanner() {
-		this.sendJSEvent(AdEvent.REQUEST);
-		this.adView.loadAd(this.adRequestBuilder.build())
+		this.loadAd()
 	}
 
 	fun addBannerView() {
+		this.adView.adListener = object: AdListener() {
+			override fun onAdLoaded() {
+				super.onAdLoaded()
 
+				Log.d(AdManagerModule.MODULE_NAME, "Ad loaded")
+
+				val event = Arguments.createMap()
+				event.putInt("width", adView.adSize.width)
+				event.putInt("height", adView.adSize.height)
+
+				sendJSEvent(AdEvent.LOADED, event)
+			}
+
+			override fun onAdFailedToLoad(code: Int) {
+				val errorMessage = getMessageForAdCode(code)
+				Log.d(AdManagerModule.MODULE_NAME, "Ad failed to load - $errorMessage")
+
+				val event = Arguments.createMap()
+				event.putString("errorMessage", errorMessage)
+
+				sendJSEvent(AdEvent.FAILED, event)
+			}
+		}
+
+		this.adView.appEventListener = object: Activity(), AppEventListener {
+			override fun onAppEvent(name: String?, info: String?) {
+				when(name) {
+					AdEvent.CLICKED.name -> {
+						Log.d(AdManagerModule.MODULE_NAME, "Ad clicked - $info")
+
+						val event = Arguments.createMap()
+						event.putString("url", info)
+
+						sendJSEvent(AdEvent.CLICKED, event)
+					}
+					AdEvent.CLOSED.name -> {
+						Log.d(AdManagerModule.MODULE_NAME, "Ad closed - $info")
+
+						destroyAdView()
+						sendJSEvent(AdEvent.CLOSED)
+					}
+				}
+			}
+		}
+
+		this.addAdView()
 	}
 
 	fun destroyBanner() {
-
+		this.destroyAdView()
 	}
 
 	fun removeBannerView() {
-
+		this.removeAdView()
 	}
 
 	fun openDebugMenu() {
@@ -70,6 +116,10 @@ class BannerView(context: Context): ReactViewGroup(context) {
 
 	// region PROP SETTERS
 	fun setAdUnitId(adUnitId: String) {
+		if (this.adView.adUnitId.isNullOrEmpty()) {
+			this.maybeSendPropSetEvent()
+		}
+
 		this.adView.adUnitId = adUnitId
 	}
 
@@ -84,6 +134,10 @@ class BannerView(context: Context): ReactViewGroup(context) {
 				Log.w(AdManagerModule.MODULE_NAME, "Unable to parse ad size - ${exception.localizedMessage}")
 				AdSize.INVALID
 			}
+		}
+
+		if (this.adView.adSizes.isEmpty()) {
+			this.maybeSendPropSetEvent()
 		}
 
 		this.adView.setAdSizes(*computedSizes.toTypedArray())
@@ -136,8 +190,22 @@ class BannerView(context: Context): ReactViewGroup(context) {
 		}
 	}
 
-	private fun setAdListeners() {
+	private fun maybeSendPropSetEvent() {
+		if (this.adView.adUnitId.isNullOrEmpty() || this.adView.adSizes.isEmpty()) {
+			return;
+		}
 
+		this.sendJSEvent(AdEvent.PROPS_SET)
+	}
+
+	private fun getMessageForAdCode(code: Int): String {
+		return when(code) {
+			PublisherAdRequest.ERROR_CODE_INTERNAL_ERROR -> "Internal error"
+			PublisherAdRequest.ERROR_CODE_INVALID_REQUEST -> "Invalid request"
+			PublisherAdRequest.ERROR_CODE_NETWORK_ERROR -> "Network error"
+			PublisherAdRequest.ERROR_CODE_NO_FILL -> "No fill"
+			else -> "Could not retrieve message. Unknown code: $code"
+		}
 	}
 	// endregion
 }

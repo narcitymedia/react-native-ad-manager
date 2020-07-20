@@ -29,33 +29,33 @@ class BannerViewManager: ViewGroupManager<BannerView>() {
 		throw RuntimeException("RNBannerView cannot have subviews")
 	}
 
-	override fun getExportedCustomBubblingEventTypeConstants(): Map<*, *>? {
-		return MapBuilder.builder<Any, Any>()
-			.put(AdEvent.CLICKED,
+	override fun getExportedCustomBubblingEventTypeConstants(): Map<String, Any>? {
+		return MapBuilder.builder<String, Any>()
+			.put(AdEvent.CLICKED.name,
 				MapBuilder.of(
 					"phasedRegistrationNames",
 					MapBuilder.of("bubbled", "onAdClicked")))
-			.put(AdEvent.CLOSED,
+			.put(AdEvent.CLOSED.name,
 				MapBuilder.of(
 					"phasedRegistrationNames",
 					MapBuilder.of("bubbled", "onAdClosed")))
-			.put(AdEvent.FAILED,
+			.put(AdEvent.FAILED.name,
 				MapBuilder.of(
 					"phasedRegistrationNames",
 					MapBuilder.of("bubbled", "onAdFailedToLoad")))
-			.put(AdEvent.LOADED,
+			.put(AdEvent.LOADED.name,
 				MapBuilder.of(
 					"phasedRegistrationNames",
 					MapBuilder.of("bubbled", "onAdLoaded")))
-			.put(AdEvent.REQUEST,
+			.put(AdEvent.REQUEST.name,
 				MapBuilder.of(
 					"phasedRegistrationNames",
 					MapBuilder.of("bubbled", "onAdRequest")))
-			.put(AdEvent.NATIVE_ERROR,
+			.put(AdEvent.NATIVE_ERROR.name,
 				MapBuilder.of(
 					"phasedRegistrationNames",
 					MapBuilder.of("bubbled", "onNativeError")))
-			.put(AdEvent.PROPS_SET,
+			.put(AdEvent.PROPS_SET.name,
 				MapBuilder.of(
 					"phasedRegistrationNames",
 					MapBuilder.of("bubbled", "onPropsSet")))
