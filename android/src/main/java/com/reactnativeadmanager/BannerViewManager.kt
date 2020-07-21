@@ -10,7 +10,6 @@ import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.reactnativeadmanager.constants.AdEvent
 import com.reactnativeadmanager.constants.Command
-import kotlin.reflect.typeOf
 
 class BannerViewManager: ViewGroupManager<BannerView>() {
 
@@ -76,7 +75,7 @@ class BannerViewManager: ViewGroupManager<BannerView>() {
 			Command.LOAD_BANNER.ordinal -> view.loadBanner()
 			Command.REMOVE_BANNER_VIEW.ordinal -> view.removeBannerView()
 			Command.OPEN_DEBUG_MENU.ordinal -> view.openDebugMenu()
-			else -> Log.d(AdManagerModule.MODULE_NAME, "Unknown command identifier $commandId")
+			else -> Log.d(AdManagerModule.REACT_CLASS, "Unknown command identifier $commandId")
 		}
 	}
 
@@ -90,13 +89,18 @@ class BannerViewManager: ViewGroupManager<BannerView>() {
 		view.setAdSizes(adSizes)
 	}
 
-	@ReactProp(name = "testDeviceIds")
-	fun setTestDeviceIds(view: BannerView, testDeviceIds: ReadableArray) {
-		view.setTestDeviceIds(testDeviceIds)
+	@ReactProp(name = "contentURL")
+	fun setContentURL(view: BannerView, contentURL: String) {
+		view.setContentURL(contentURL)
 	}
 
 	@ReactProp(name = "targeting")
 	fun setTargeting(view: BannerView, targeting: ReadableMap) {
 		view.setTargeting(targeting)
+	}
+
+	@ReactProp(name = "testDeviceIds")
+	fun setTestDeviceIds(view: BannerView, testDeviceIds: ReadableArray) {
+		view.setTestDeviceIds(testDeviceIds)
 	}
 }

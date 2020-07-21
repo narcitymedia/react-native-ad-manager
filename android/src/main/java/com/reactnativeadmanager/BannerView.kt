@@ -13,7 +13,6 @@ import com.google.android.gms.ads.RequestConfiguration
 import com.google.android.gms.ads.doubleclick.AppEventListener
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest
 import com.google.android.gms.ads.doubleclick.PublisherAdView
-import com.google.android.gms.ads.initialization.InitializationStatus
 import com.reactnativeadmanager.constants.AdEvent
 import java.lang.Exception
 
@@ -31,7 +30,7 @@ class BannerView(context: Context): ReactViewGroup(context) {
 
 	private fun addAdView() {
 		if (this.childCount != 0) {
-			Log.w(AdManagerModule.MODULE_NAME, "Tried to add view while a child is already present")
+			Log.w(AdManagerModule.REACT_CLASS, "Tried to add view while a child is already present")
 			return;
 		}
 
@@ -111,17 +110,6 @@ class BannerView(context: Context): ReactViewGroup(context) {
 		this.maybeSendPropSetEvent()
 	}
 
-	fun setTestDeviceIds(testDeviceIds: ReadableArray) {
-		try {
-			val devices = testDeviceIds.toArrayList().toMutableList() as MutableList<String>
-			RequestConfiguration.Builder().setTestDeviceIds(devices).build()
-		}
-
-		catch (exception: Exception) {
-			Log.w(AdManagerModule.MODULE_NAME, "Unable to parse testDeviceIds - ${exception.localizedMessage}")
-		}
-	}
-
 	fun setTargeting(targeting: ReadableMap) {
 		targeting.toHashMap().forEach { entry ->
 			if (entry.value is ReadableArray) {
@@ -139,6 +127,21 @@ class BannerView(context: Context): ReactViewGroup(context) {
 			}
 		}
 	}
+
+	fun setContentURL(contentURL: String) {
+		this.adRequestBuilder.setContentUrl(contentURL)
+	}
+
+	fun setTestDeviceIds(testDeviceIds: ReadableArray) {
+		try {
+			val devices = testDeviceIds.toArrayList().toMutableList() as MutableList<String>
+			RequestConfiguration.Builder().setTestDeviceIds(devices).build()
+		}
+
+		catch (exception: Exception) {
+			Log.w(AdManagerModule.REACT_CLASS, "Unable to parse testDeviceIds - ${exception.localizedMessage}")
+		}
+	}
 	// endregion
 
 	// region UTILITY METHODS
@@ -154,7 +157,7 @@ class BannerView(context: Context): ReactViewGroup(context) {
 		}
 
 		catch (exception: Exception) {
-			Log.w(AdManagerModule.MODULE_NAME, "Unable to send event ${event.name} - ${exception.localizedMessage}")
+			Log.w(AdManagerModule.REACT_CLASS, "Unable to send event ${event.name} - ${exception.localizedMessage}")
 		}
 	}
 
@@ -181,7 +184,7 @@ class BannerView(context: Context): ReactViewGroup(context) {
 			override fun onAdLoaded() {
 				super.onAdLoaded()
 
-				Log.d(AdManagerModule.MODULE_NAME, "Ad loaded")
+				Log.d(AdManagerModule.REACT_CLASS, "Ad loaded")
 
 				val width = adView.adSize.width
 				val height = adView.adSize.height
@@ -200,7 +203,7 @@ class BannerView(context: Context): ReactViewGroup(context) {
 				super.onAdFailedToLoad(code)
 
 				val errorMessage = getMessageForAdCode(code)
-				Log.d(AdManagerModule.MODULE_NAME, "Ad failed to load - $errorMessage")
+				Log.d(AdManagerModule.REACT_CLASS, "Ad failed to load - $errorMessage")
 
 				val event = Arguments.createMap()
 				event.putString("errorMessage", errorMessage)
@@ -211,10 +214,11 @@ class BannerView(context: Context): ReactViewGroup(context) {
 
 		this.adView.appEventListener = object: Activity(), AppEventListener {
 			override fun onAppEvent(name: String?, info: String?) {
-				Log.d(AdManagerModule.MODULE_NAME, "$name - $info")
+				Log.d(AdManagerModule.REACT_CLASS, "$name - $info")
+				
 				when(name) {
 					AdEvent.CLICKED.name -> {
-						Log.d(AdManagerModule.MODULE_NAME, "Ad clicked - $info")
+						Log.d(AdManagerModule.REACT_CLASS, "Ad clicked - $info")
 
 						val event = Arguments.createMap()
 						event.putString("url", info)
@@ -222,7 +226,7 @@ class BannerView(context: Context): ReactViewGroup(context) {
 						sendJSEvent(AdEvent.CLICKED, event)
 					}
 					AdEvent.CLOSED.name -> {
-						Log.d(AdManagerModule.MODULE_NAME, "Ad closed - $info")
+						Log.d(AdManagerModule.REACT_CLASS, "Ad closed - $info")
 
 						destroyAdView()
 						sendJSEvent(AdEvent.CLOSED)
