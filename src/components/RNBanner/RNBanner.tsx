@@ -32,7 +32,7 @@ export interface RNBannerRef {
 }
 
 export const RNBanner = forwardRef<RNBannerRef, RNBannerProps>((props, ref)=> {
-    const { targeting = {}, testDeviceIds = [], onAdRequest, onAdFailedToLoad, onAdLoaded, onAdClicked, onAdClosed, onPropsSet, ...rest } = props;
+    const { onAdRequest, onAdFailedToLoad, onAdLoaded, onAdClicked, onAdClosed, onPropsSet, ...rest } = props;
 
     const bannerViewRef = useRef<any>(null);
     const arePropsSet = useRef<boolean>(false);
@@ -182,12 +182,10 @@ export const RNBanner = forwardRef<RNBannerRef, RNBannerProps>((props, ref)=> {
         <RNBannerView
             {...rest}
             ref={bannerViewRef}
-            targeting={targeting}
             onAdLoaded={handleAdLoaded}
             onPropsSet={handlePropsSet}
             onAdClosed={handleAdClosed}
             onAdRequest={handleAdRequest}
-            testDeviceIds={testDeviceIds}
             onAdClicked={handleAdClicked}
             onAdFailedToLoad={handleAdFailedToLoad}
         />

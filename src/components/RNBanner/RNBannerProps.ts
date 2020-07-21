@@ -5,6 +5,7 @@ export interface RNBannerProps {
     adId: string;
     adSizes: NumericAdSize[];
     targeting?: Record<string, string | any[]>;
+    contentURL?: string;
     style?: StyleProp<ViewStyle>;
     testDeviceIds?: string[];
 

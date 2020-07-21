@@ -57,6 +57,12 @@ class BannerView: UIView {
 		}
 	}
 	
+	@objc var contentURL: String = "" {
+		didSet {
+			self.onContentURLChange()
+		}
+	}
+	
 	@objc var testDeviceIds: Array<String> = [""] {
 		didSet {
 			self.onTestDeviceIdsChange()
@@ -115,6 +121,10 @@ class BannerView: UIView {
         }
 		
 		self.adRequest.customTargeting = customTargeting
+	}
+	
+	private func onContentURLChange() {
+		self.adRequest.contentURL = self.contentURL
 	}
 	
 	private func onTestDeviceIdsChange() {
