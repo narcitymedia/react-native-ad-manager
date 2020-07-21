@@ -6,6 +6,8 @@ A React Native wrapper around the native Google Ad Manager SDKs with full suppor
 
 A handful of Google Ad Manager wrappers for React Native already exist but they all have flaws such as poor typing, no support for content mapping, etc. This repository was inspired by [callosum-software/react-native-google-ad-manager](https://github.com/callosum-software/react-native-google-ad-manager) at first and then heavily refactored to improve code readability and organization, especially on iOS. 
 
+This project only implements support for ad banners at the moment as we don't use native ads nor interstitials internally.
+
 ## Installation
 
 Considering this repository is private and the package has not been published to npm, you will need to add this to your `package.json`, under the `dependencies` key:
