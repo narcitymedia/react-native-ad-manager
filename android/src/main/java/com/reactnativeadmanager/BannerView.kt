@@ -215,7 +215,7 @@ class BannerView(context: Context): ReactViewGroup(context) {
 		this.adView.appEventListener = object: Activity(), AppEventListener {
 			override fun onAppEvent(name: String?, info: String?) {
 				Log.d(AdManagerModule.REACT_CLASS, "$name - $info")
-				
+
 				when(name) {
 					AdEvent.CLICKED.name -> {
 						Log.d(AdManagerModule.REACT_CLASS, "Ad clicked - $info")
