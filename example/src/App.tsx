@@ -31,10 +31,6 @@ export default function App() {
 						adId={AD_UNIT_ID}
 						adSizes={[AdSize.LARGE_BANNER]}
 						testDeviceIds={[simulatorTestId]}
-						targeting={{
-							author: "amber-hort",
-							topics: ["news", "canada", "quebec"]
-						}}
 					/>
 				</View>
 
