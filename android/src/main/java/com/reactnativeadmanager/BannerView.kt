@@ -18,13 +18,21 @@ import java.lang.Exception
 
 class BannerView(context: Context): ReactViewGroup(context) {
 
-	private var adView: PublisherAdView = PublisherAdView(context)
-	private var adRequestBuilder: PublisherAdRequest.Builder = PublisherAdRequest.Builder()
+	private var adView: PublisherAdView
+	private var adRequestBuilder: PublisherAdRequest.Builder
+
+	init {
+		val view = PublisherAdView(context)
+		view.setAdSizes(AdSize.BANNER)
+
+		this.adView = view
+		this.adRequestBuilder = PublisherAdRequest.Builder()
+	}
 
 	// region PRIVATE METHODS
 	private fun loadAd() {
 		this.setAdEventListeners()
-		this.sendJSEvent(AdEvent.REQUEST);
+		this.sendJSEvent(AdEvent.REQUEST)
 		this.adView.loadAd(this.adRequestBuilder.build())
 	}
 
