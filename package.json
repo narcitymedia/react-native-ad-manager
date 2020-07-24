@@ -1,6 +1,6 @@
 {
 	"name": "react-native-ad-manager",
-	"version": "0.1.0",
+	"version": "1.0.0",
 	"description": "A React Native wrapper around Google Ad Manager SDKs",
 	"main": "lib/commonjs/index",
 	"module": "lib/module/index",
